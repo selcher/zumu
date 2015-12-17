@@ -4,6 +4,7 @@
 
 #grid-container {
     position: relative;
+    margin: 40px;
 }
 
 #grid {
