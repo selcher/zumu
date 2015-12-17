@@ -1,0 +1,18 @@
+#zumu-header {
+    padding-left: 115px;
+}
+
+#grid-container {
+    position: relative;
+}
+
+#grid {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    background: url('../assets/images/exgrid.png');
+}
+
+#control-buttons {
+    margin: 10px;
+}
