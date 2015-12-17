@@ -23,3 +23,12 @@ var zumu = new Zumu();
 
 zumu.init( htmlElement );
 ```
+
+## User Guide
+
+#### Key Shortcuts:
+
+* i = zoom in
+* o = zoom out
+* r = reset zoom
+* arrow keys = move
