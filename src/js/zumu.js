@@ -10,6 +10,11 @@ var Zumu = ( function( browserDoc ) {
 
             }
 
+        },
+        isUndefined = function( val ) {
+
+            return val === undefined || val === null;
+
         };
 
     /**
@@ -25,8 +30,9 @@ var Zumu = ( function( browserDoc ) {
             this.contentContainer = null;
             this.x = 0;
             this.y = 0;
-            this.z = -100;
-            this.zoomIncrement = 100;
+            this.z = 0;
+            this.scale = 1;
+            this.zoomIncrement = 0.1;
             this.moveIncrement = 10;
 
             instance = this;
@@ -88,25 +94,10 @@ var Zumu = ( function( browserDoc ) {
         // set tabindex to capture keyboard events
         container.setAttribute( "tabindex", 0 );
 
-        // Set translate position of content container
-        this.setElementPosition( this.x, this.y, this.z );
+        // Reset scale and translate position of content container
+        this.resetZoom();
 
         return container;
-
-    };
-
-    Zoom.prototype.setElementStyle = function( style ) {
-
-        this.contentContainer.style.cssText += style;
-
-    };
-
-    Zoom.prototype.setElementPosition = function( x, y, z ) {
-
-        var translateStyle = this.buildTranslateStyle( x, y, z ),
-            transformStyle = this.buildTransformStyle( translateStyle );
-
-        this.setElementStyle( transformStyle );
 
     };
 
@@ -117,6 +108,9 @@ var Zumu = ( function( browserDoc ) {
         if ( options ) {
 
             button.style.cssText += options.style;
+            button.className = options.class;
+            button.innerHTML = options.html;
+            button.addEventListener( "click", options.click );
 
         }
 
@@ -133,7 +127,12 @@ var Zumu = ( function( browserDoc ) {
                         "top": 10,
                         "left": 10
                     }
-                )
+                ),
+                "class": "zumu-button",
+                "html": "+",
+                "click": function() {
+                    self.zoom( self.zoomIncrement );
+                }
             }),
             zoomInButton = this.createButton({
                 "style": this.buildPositionStyle(
@@ -141,7 +140,12 @@ var Zumu = ( function( browserDoc ) {
                         "top": 10,
                         "left": 35
                     }
-                )
+                ),
+                "class": "zumu-button",
+                "html": "-",
+                "click": function() {
+                    self.zoom( -self.zoomIncrement );
+                }
             }),
             zoomResetButton = this.createButton({
                 "style": this.buildPositionStyle(
@@ -149,49 +153,46 @@ var Zumu = ( function( browserDoc ) {
                         "top": 10,
                         "left": 60
                     }
-                )
+                ),
+                "class": "zumu-button",
+                "html": "*",
+                "click": function() {
+                    self.resetZoom();
+                }
             });
 
         container.appendChild( zoomOutButton );
         container.appendChild( zoomInButton );
         container.appendChild( zoomResetButton );
 
-        zoomOutButton.className = "zumu-button";
-        zoomOutButton.innerHTML = "+";
-        zoomInButton.className = "zumu-button";
-        zoomInButton.innerHTML = "-";
-        zoomResetButton.className = "zumu-button";
-        zoomResetButton.innerHTML = "*";
+    };
 
-        zoomOutButton.addEventListener( "click", function() {
-            self.zoom( self.zoomIncrement );
-        });
+    Zoom.prototype.setContentContainerStyle = function( style ) {
 
-        zoomInButton.addEventListener( "click", function() {
-            self.zoom( -self.zoomIncrement );
-        });
+        this.contentContainer.style.cssText += style;
 
-        zoomResetButton.addEventListener( "click", function() {
-            self.resetZoom();
-        });
+    };
+
+    Zoom.prototype.updateTransform = function( scale, translate ) {
+
+        var transformStyle = this.buildTransformStyle( scale, translate );
+
+        this.setContentContainerStyle( transformStyle );
 
     };
 
     Zoom.prototype.zoom = function( val ) {
 
-        if ( this.z + val <= -100 ) {
-
-            this.z += val;
-            this.setElementPosition( this.x, this.y, this.z );
-
-        }
+        this.scale += val;
+        this.updateTransform();
 
     };
 
     Zoom.prototype.resetZoom = function() {
 
         this.resetPosition();
-        this.setElementPosition( this.x, this.y, this.z );
+        this.resetScale();
+        this.updateTransform();
 
     };
 
@@ -199,7 +200,13 @@ var Zumu = ( function( browserDoc ) {
 
         this.x = 0;
         this.y = 0;
-        this.z = -100;
+        this.z = 0;
+
+    };
+
+    Zoom.prototype.resetScale = function() {
+
+        this.scale = 1;
 
     };
 
@@ -282,14 +289,14 @@ var Zumu = ( function( browserDoc ) {
     Zoom.prototype.moveX = function( val ) {
 
         this.x += val;
-        this.setElementPosition( this.x, this.y, this.z );
+        this.updateTransform();
 
     };
 
     Zoom.prototype.moveY = function( val ) {
 
         this.y += val;
-        this.setElementPosition( this.x, this.y, this.z );
+        this.updateTransform();
 
     };
 
@@ -310,17 +317,46 @@ var Zumu = ( function( browserDoc ) {
         return "translate3d(" +
             ( x ? ( x + "px" ) : 0 ) + "," +
             ( y ? ( y + "px" ) : 0 ) + "," +
-            ( z ? ( z + "px" ) : 0 ) + ");";
+            ( z ? ( z + "px" ) : 0 ) + ")";
 
     };
 
-    Zoom.prototype.buildTransformStyle = function( style ) {
+    Zoom.prototype.buildScaleStyle = function( scale ) {
+
+        return 'scale(' + scale + ',' + scale + ')';
+
+    };
+
+    Zoom.prototype.buildTransformStyle = function( scale, translate ) {
+
+        var transformStyle = this.buildTransformValueStyle( scale, translate );
+
+        return this.buildTransformPrefixStyle( transformStyle );
+
+    };
+
+    Zoom.prototype.buildTransformValueStyle = function( scale, translate ) {
+
+        var newScale = isUndefined( scale ) ? this.scale : scale,
+            newTranslate = isUndefined( translate ) ? {} : translate,
+            scaleStyle = this.buildScaleStyle( newScale ),
+            translateStyle = this.buildTranslateStyle(
+                isUndefined( newTranslate.x ) ? this.x : newTranslate.x,
+                isUndefined( newTranslate.y ) ? this.y : newTranslate.y,
+                isUndefined( newTranslate.z ) ? this.z : newTranslate.z
+            );
+
+        return scaleStyle + " " + translateStyle + ";";
+
+    };
+
+    Zoom.prototype.buildTransformPrefixStyle = function( transformStyle ) {
 
         return [
-            "transform:" + style,
-            "-webkit-transform:" + style,
-            "-moz-transform::" + style,
-            "-o-transform::" + style
+            "transform:" + transformStyle,
+            "-webkit-transform:" + transformStyle,
+            "-moz-transform:" + transformStyle,
+            "-o-transform:" + transformStyle
         ].join( "" );
 
     };
@@ -346,14 +382,14 @@ var Zumu = ( function( browserDoc ) {
 
             posStyle = [
                 "position:absolute;",
-                pos && pos.top ?
-                    "top:" + pos.top + "px;" : "",
-                pos && pos.right ?
-                    "right:" + pos.right + "px;" : "",
-                pos && pos.left ?
-                    "left:" + pos.left + "px;" : "",
-                pos && pos.bottom ?
-                    "bottom:" + pos.bottom + "px;" : ""
+                pos && isUndefined( pos.top ) ?
+                    "" : "top:" + pos.top + "px;",
+                pos && isUndefined( pos.right ) ?
+                    "" : "right:" + pos.right + "px;",
+                pos && isUndefined( pos.left ) ?
+                    "" : "left:" + pos.left + "px;",
+                pos && isUndefined( pos.bottom ) ?
+                    "" : "bottom:" + pos.bottom + "px;"
             ].join( "" );
 
         }
@@ -366,9 +402,10 @@ var Zumu = ( function( browserDoc ) {
 
         if ( this.contentContainer ) {
 
-            // Reset position
+            // Reset position and scale
             this.resetPosition();
-            this.setElementStyle( this.buildTransformStyle( "none;" ) );
+            this.resetScale();
+            this.resetTransform();
 
             // Move content container outside container
             // but make sure content container stays at current position
@@ -393,6 +430,14 @@ var Zumu = ( function( browserDoc ) {
             log( "ZumuJS: Initialize before calling revert." );
 
         }
+
+    };
+
+    Zoom.prototype.resetTransform = function() {
+
+        this.setContentContainerStyle(
+            this.buildTransformPrefixStyle( "none;" )
+        );
 
     };
 
