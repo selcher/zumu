@@ -72,4 +72,5 @@ gulp.task('watch', function() {
 gulp.task('default', ['jslint', 'minify-scripts', 'minify-styles']);
 
 gulp.task('dev', [
-    'minify-scripts', 'minify-styles', 'server', 'livereload', 'watch']);
+    'jslint', 'minify-scripts', 'minify-styles',
+    'server', 'livereload', 'watch']);
