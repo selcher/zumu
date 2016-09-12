@@ -1,0 +1,28 @@
+{
+	// Extend existing configuration
+	// from ESlint defaults
+	"extends": [
+		"eslint:recommended"
+	],
+	// Enables ES6 support.
+	// To use custom Babel features, you will need
+	// to enabled a custom parser as described in a section below.
+	"parserOptions": {
+		"ecmaVersion": 6,
+		"sourceType": "module"
+	},
+	"env": {
+		"browser": true,
+		"node": true,
+		"mocha": true
+	},
+	"rules": {
+		// Disable no-console rule
+		"no-console": 0,
+		// Give warning if identifiers contain underscores
+		"no-underscore-dangle": 1,
+		// Default to double quotes and
+		// raise an error if something else is used.
+		"quotes": [2, "double"]
+	}
+}

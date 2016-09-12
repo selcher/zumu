@@ -12,7 +12,7 @@ var copyright = [
 ].join('\n');
 
 var gulp = require('gulp');
-var jslint = require('gulp-jslint');
+var eslint = require('gulp-eslint');
 var uglify = require('gulp-uglify');
 var header = require('gulp-header');
 var rename = require('gulp-rename');
@@ -36,16 +36,12 @@ gulp.task('minify-styles', function() {
         .pipe(gulp.dest('dist'))
 });
 
-gulp.task('jslint', function() {
+gulp.task('lint', function() {
     return gulp.src(['./src/js/*.js'])
-        .pipe(jslint({
-            browser: true,
-            todo: true,
-            devel: true,
-            white: true,
-            reporter: 'default',
-            errorsOnly: false
+        .pipe(eslint({
+            useEslintrc: true
         }))
+        .pipe(eslint.format())
         .on('error', function(error) {
             console.error(String(error));
         });
@@ -69,8 +65,8 @@ gulp.task('watch', function() {
     gulp.watch('src/js/*.js', ['minify-scripts']);
 });
 
-gulp.task('default', ['jslint', 'minify-scripts', 'minify-styles']);
+gulp.task('default', ['lint', 'minify-scripts', 'minify-styles']);
 
 gulp.task('dev', [
-    'jslint', 'minify-scripts', 'minify-styles',
+    'lint', 'minify-scripts', 'minify-styles',
     'server', 'livereload', 'watch']);
