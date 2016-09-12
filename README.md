@@ -1,5 +1,7 @@
 # ZumuJS
 
+[![Build Status](https://travis-ci.org/selcher/zumu.svg?branch=master)](https://travis-ci.org/selcher/zumu)
+
 Make web elements zoomable!
 
 ## Demo
