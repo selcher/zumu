@@ -1,7 +1,7 @@
 var Zumu = ( function( browserDoc ) {
     "use strict";
 
-    var doc = browserDoc,
+    var doc = browserDoc || {},
         log = function( message ) {
 
             if ( console !== undefined && console.log ) {
@@ -215,7 +215,7 @@ var Zumu = ( function( browserDoc ) {
         var self = this;
 
         // Prevent browser scroll when focus is on container
-        document.addEventListener( "keydown", function( e ) {
+        doc.addEventListener( "keydown", function( e ) {
 
             if ( doc.activeElement === container ) {
 
@@ -323,7 +323,7 @@ var Zumu = ( function( browserDoc ) {
 
     Zoom.prototype.buildScaleStyle = function( scale ) {
 
-        return 'scale(' + scale + ',' + scale + ')';
+        return "scale(" + scale + "," + scale + ")";
 
     };
 
@@ -443,11 +443,17 @@ var Zumu = ( function( browserDoc ) {
 
     Zoom.prototype.resetContainers = function() {
 
-        this.container = document.createElement( "div" );
+        this.container = doc.createElement( "div" );
         this.contentContainer = null;
 
     };
 
     return Zoom;
 
-}( document ) );
+}(
+    document
+));
+
+if ( typeof module != "undefined") {
+    module.exports = Zumu;
+}
