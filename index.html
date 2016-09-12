@@ -135,6 +135,63 @@
 
 			</div>
 
+			<div id="download"
+				class="ui vertical stripe segment">
+
+				<div class="ui text container">
+
+					<h3 class="ui dividing header">
+						Download
+					</h3>
+
+					<div class="ui relaxed divided list">
+						<div class="item">
+							<i class="large linkify middle aligned icon"></i>
+							<div class="content">
+								<a class="header"
+									href="https://raw.githubusercontent.com/selcher/zumu/master/dist/zumu.min.js"
+									target="_blank">
+									minified zumu-js file
+								</a>
+								<div class="description">
+									version 1.0.2
+								</div>
+							</div>
+						</div>
+						<div class="item">
+							<i class="large linkify middle aligned icon"></i>
+							<div class="content">
+								<a class="header"
+									href="https://raw.githubusercontent.com/selcher/zumu/master/dist/zumu.min.css"
+									target="_blank">
+									minified zumu-css file
+								</a>
+								<div class="description">
+									version 1.0.2
+								</div>
+							</div>
+						</div>
+						<div class="item">
+							<br/>
+							<h4>
+								Or Install From NPM
+							</h4>
+							<div class="ui segment">
+								<pre>
+									<code class="ignored code"
+										data-type="javascript"
+										data-escape="true">
+npm install zumujs
+									</code>
+								</pre>
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+
 			<div id="getting-started"
 				class="ui vertical stripe segment">
 
@@ -158,9 +215,7 @@
 								</code>
 							</pre>
 						</div>
-					</div>
 
-					<div class="ui vertical stripe segment">
 						<h4>
 							Initialize Zumu on an HTML element
 						</h4>
@@ -173,50 +228,27 @@ var htmlElement = document.getElementById( "id of element" );
 var zumu = new Zumu();
 
 zumu.init( htmlElement );
+
+// restore element
+zumu.revert();
 								</code>
 							</pre>
 						</div>
-					</div>
 
-				</div>
-
-			</div>
-
-			<div id="download"
-				class="ui vertical stripe segment">
-
-				<div class="ui text container">
-
-					<h3 class="ui dividing header">
-						Download
-					</h3>
-
-					<div class="ui relaxed divided list">
-						<div class="item">
-							<i class="large linkify middle aligned icon"></i>
-							<div class="content">
-								<a class="header"
-									href="https://raw.githubusercontent.com/selcher/zumu/master/dist/zumu.min.js"
-									target="_blank">
-									minified zumu-js file
-								</a>
-								<div class="description">
-									version 1.0.0
-								</div>
-							</div>
-						</div>
-						<div class="item">
-							<i class="large linkify middle aligned icon"></i>
-							<div class="content">
-								<a class="header"
-									href="https://raw.githubusercontent.com/selcher/zumu/master/dist/zumu.min.css"
-									target="_blank">
-									minified zumu-css file
-								</a>
-								<div class="description">
-									version 1.0.0
-								</div>
-							</div>
+						<h4>
+							Keyboard controls
+						</h4>
+						<div class="ui segment">
+							<pre>
+								<code class="ignored code"
+									data-type="text"
+									data-escape="true">
+* i = zoom in
+* o = zoom out
+* r = reset zoom
+* arrow keys = move
+								</code>
+							</pre>
 						</div>
 					</div>
 
