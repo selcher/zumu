@@ -1,6 +1,6 @@
 {
   "name": "zumujs",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Make web elements zoomable!",
   "main": "dist/zumu.min.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "author": "Selcher",
   "license": "MIT",
   "keywords": "zoom",
-  "homepage": "https://github.com/selcher/selcher.github.io",
+  "homepage": "https://github.com/selcher",
   "devDependencies": {
     "better-console": "^0.2.4",
     "chai": "^3.5.0",
