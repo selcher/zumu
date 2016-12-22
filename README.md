@@ -1,6 +1,8 @@
 # ZumuJS
 
+[![npm version](https://badge.fury.io/js/zumujs.svg)](https://badge.fury.io/js/zumujs)
 [![Build Status](https://travis-ci.org/selcher/zumu.svg?branch=master)](https://travis-ci.org/selcher/zumu)
+<a href="https://david-dm.org/selcher/zumu?type=dev"><img src="https://david-dm.org/selcher/zumu/dev-status.svg" alt="devDependency Status"></a>
 
 Make web elements zoomable!
 
