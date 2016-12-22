@@ -1,5 +1,5 @@
 /**
- * ZumuJS - 1.0.2
+ * ZumuJS - 1.0.3
  * https://github.com/selcher/zumu
  *
  * Released under the MIT License
